@@ -6,6 +6,7 @@ Controller description: JSON API Extension for WPSPA Client
 
 require_once( WPSPA__MODEL_DIR . 'class.siteinfo.php' );
 require_once( WPSPA__MODULE_DIR . 'class.menu-links.php' );
+require_once( WPSPA__MODULE_DIR . 'class.menu-props.php' );
         
 class json_api_wpspa_controller {
 
@@ -54,8 +55,13 @@ class json_api_wpspa_controller {
     
     WPSPA_Menu_Links::object_links($posts);
 
+    WPSPA_Menu_Props::object_props($posts);
+
     $query['custom_fields'] .= "," .
-      implode(",", WPSPA_Menu_Links::get_custom_fields());
+      implode(",", array_merge(
+        WPSPA_Menu_Links::get_custom_fields(), 
+        WPSPA_Menu_Props::get_custom_fields()
+      ));
     
     $result = $this->posts_result($posts);
     $result['query'] = $query;
