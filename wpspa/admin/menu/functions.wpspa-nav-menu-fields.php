@@ -12,16 +12,16 @@ function WPSPA_menu_item_additional_fields( $fields ) {
 		'label' => __('WPSPA Menu Text', 'WPSPA'),
 		'input_type' => 'text'
 	);
-    $fields['post_type'] = array(
-      'name' => 'post_type',
-      'label' => __('WPSPA Post Type', 'WPSPA'),
-      'input_type' => 'text'
-    );
-    $fields['object_id'] = array(
-      'name' => 'object_id',
-      'label' => __('WPSPA Object ID', 'WPSPA'),
-      'input_type' => 'text'
-    );
+  $fields['post_type'] = array(
+    'name' => 'post_type',
+    'label' => __('WPSPA Post Type', 'WPSPA'),
+    'input_type' => 'text'
+  );
+  $fields['object_id'] = array(
+    'name' => 'object_id',
+    'label' => __('WPSPA Object ID', 'WPSPA'),
+    'input_type' => 'text'
+  );
 	return $fields;
 }
 

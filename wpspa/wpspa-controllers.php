@@ -9,14 +9,14 @@ require_once( $wpspa_controller_path );
 
 // Extend json-api controller array
 function wpspa_controllers($controllers) {
-    array_push($controllers, 'wpspa');
-    return $controllers;
+  array_push($controllers, 'wpspa');
+  return $controllers;
 }
 
 // Reveal the path to the wpspa controller file to json-api
 function wpspa_path($path) {
-    global $wpspa_controller_path;
-    return $wpspa_controller_path;
+  global $wpspa_controller_path;
+  return $wpspa_controller_path;
 }
 
 // Get the calls from json-api
