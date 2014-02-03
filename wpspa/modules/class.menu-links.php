@@ -39,9 +39,9 @@ class WPSPA_Menu_Links {
     $custom_fields = $menuItem->custom_fields;
     $target_id = $custom_fields->_menu_item_wpspa_object_id[0];
     $post = get_post($target_id);
-
-    if ($post) {
-      $custom_fields->_menu_item_wpspa_object_links = array();
+    $custom_fields->_menu_item_wpspa_object_links = array();
+    
+    if ($post) {      
       $hrefs = 
           WPSPA_Menu_Links::parse_anchor_hrefs_from_html($post->post_content);
       foreach ($hrefs as $href) {
