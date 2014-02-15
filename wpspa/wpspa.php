@@ -16,6 +16,7 @@ define( 'WPSPA__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 require_once( WPSPA__PLUGIN_DIR . 'class.wpspa.php'       );
 require_once( WPSPA__PLUGIN_DIR . 'wpspa-admin.php'       );
+require_once( WPSPA__PLUGIN_DIR . 'wpspa-actions.php'     );
 require_once( WPSPA__PLUGIN_DIR . 'wpspa-controllers.php' );
 
 register_activation_hook( __FILE__, array( 'WPSPA', 'plugin_activation' ) );
