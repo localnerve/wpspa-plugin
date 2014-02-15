@@ -8,14 +8,14 @@ class WPSPA {
     return false;
   }
 
-  public static function _json_api_dependency_warning() {
-    echo "<div id=\"json-api-warning\" class=\"updated fade\"><p>JSON API plugin not found or active. This plugin depends on the JSON API plugin.</p></div>";
+  public static function _json_api_dependency_error() {
+    echo "<div id=\"json-api-error\" class=\"error\"><p>JSON API plugin not found or active. This plugin depends on the JSON API plugin to function.</p></div>";
   }
     
   public static function init() {
     add_filter('redirect_canonical', array(__CLASS__, '_stop_redirect_canonical'));
     if (!class_exists('JSON_API')) {
-      add_action('admin_notices', array(__CLASS__, '_json_api_dependency_warning'));
+      add_action('admin_notices', array(__CLASS__, '_json_api_dependency_error'));
       return;
     }
   }
