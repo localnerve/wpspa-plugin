@@ -16,7 +16,7 @@ class WPSPA_Menu_Props {
   // Updates the menu_item's custom_fields with a _menu_item_wpspa_object_props object
   //  that contains properties about the target post specified in 
   // _menu_item_wpspa_object_id:
-  //   { is_singular }
+  //   { is_single }
   static protected function props_from_menu_post($menu_item, $target_query) {
     
     // _menu_item_wpspa_object_props defaults
@@ -99,7 +99,7 @@ class WPSPA_Menu_Props {
       );
     }
 
-    wp_reset_query();
+    //wp_reset_query();
     wp_reset_postdata();
   }  
 }
