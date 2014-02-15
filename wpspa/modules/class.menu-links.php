@@ -7,7 +7,7 @@ class WPSPA_Menu_Links {
   // Make sense out of the _wpspa_prefetch custom field.
   // If it exists and set to any non-falsy string at all, it is true.
   // All other cases, it is false.
-  static protected function get_prefetch_preference($custom) {
+  static public function get_prefetch_preference($custom) {
     $result = false;
 
     if ($custom['_wpspa_prefetch'] && count($custom['_wpspa_prefetch']) > 0) {
@@ -29,15 +29,19 @@ class WPSPA_Menu_Links {
 
     $children = WPSPA_Links::get_link_children($post);
 
+    $single_post_types = array( 'post', 'page' );
+    $single_post_types = apply_filters('WPSPA_single_post_types', $single_post_types);
+
     foreach ($children as $id => $child) {
       $custom = get_post_custom((int)$id);
+      $type = get_post_type((int)$id);
       array_push($custom_fields->_menu_item_wpspa_object_links,
         (object)array(
           'id' => (int)$id,
-          'type' => get_post_type((int)$id),
+          'type' => $type,
+          'name' => $child->post->post_name,
           'href' => $child->href,
-          'has_comments' => $child->post->comment_count > 0,
-          'can_comment' => $child->post->comment_status == "open",
+          'is_single' => in_array($type, $single_post_types),
           'prefetch' => WPSPA_Menu_Links::get_prefetch_preference($custom)
         )
       );

@@ -11,6 +11,13 @@ class WPSPA_Menu_Props {
     return !$target_query->is_archive;
   }
 
+  // Check to see the posts prefetch preferences.
+  static protected function prefetch($target_query) {
+    return WPSPA_Menu_Links::get_prefetch_preference(
+      get_post_custom($target_query->post->ID)
+    );
+  }
+
   // Receives a menu item from the post_type=nav_menu_item query,
   //  and the inner query of menu targets from custom field _menu_item_wpspa_object_id.
   // Updates the menu_item's custom_fields with a _menu_item_wpspa_object_props object
@@ -21,11 +28,14 @@ class WPSPA_Menu_Props {
     
     // _menu_item_wpspa_object_props defaults
     $props = array(
-      'is_single' => false
+      'is_single' => false,
+      'prefetch' => false
     );
 
-    if ($target_query)
-      $props['is_single'] = WPSPA_Menu_props::is_single($target_query);
+    if ($target_query) {
+      $props['is_single'] = WPSPA_Menu_Props::is_single($target_query);
+      $props['prefetch'] = WPSPA_Menu_Props::prefetch($target_query);
+    }
 
     $custom_fields = $menu_item->custom_fields;
     $custom_fields->_menu_item_wpspa_object_props = (object)$props;
@@ -93,7 +103,7 @@ class WPSPA_Menu_Props {
     // loop through the targets and update the menu_item accordingly
     while($target_query->have_posts()) {
       $target_query->next_post();
-      WPSPA_Menu_props::props_from_menu_post(
+      WPSPA_Menu_Props::props_from_menu_post(
         $menu_item_target_map[$target_query->post->ID], 
         $target_query        
       );
