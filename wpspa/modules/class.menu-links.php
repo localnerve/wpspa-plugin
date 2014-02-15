@@ -1,5 +1,7 @@
 <?php
 
+require_once( WPSPA__MODULE_DIR . 'class.links.php' );
+
 class WPSPA_Menu_Links {
     
   // Make sense out of the _wpspa_prefetch custom field.
@@ -14,23 +16,7 @@ class WPSPA_Menu_Links {
 
     return $result;
   }
-    
-  // Pull all hrefs in anchors from the content.
-  // Returns an array of hrefs.
-  static protected function parse_anchor_hrefs_from_html($content) {
-    $links = array();
 
-    if (preg_match_all( '#(?:<a[^>]+?href=["|\'](?P<link_url>[^\s]+?)["|\'][^>]*?>\s*){1}(?:[^<]+</a>)?#is', $content, $links )) {
-      foreach ( $links as $key => $unused ) {
-        // Simplify the output as much as possible, mostly for confirming test results.
-        if ( is_numeric( $key ) && $key > 0 )
-          unset( $links[$key] );
-      }
-    }
-        
-    return $links['link_url'];
-  }
-  
   // Receives a post from the post_type=nav_menu_item query
   // Updates the post's custom_fields with a _menu_item_wpspa_object_links array
   // that contains objects:
@@ -40,26 +26,21 @@ class WPSPA_Menu_Links {
     $target_id = $custom_fields->_menu_item_wpspa_object_id[0];
     $post = get_post($target_id);
     $custom_fields->_menu_item_wpspa_object_links = array();
-    
-    if ($post) {      
-      $hrefs = 
-          WPSPA_Menu_Links::parse_anchor_hrefs_from_html($post->post_content);
-      foreach ($hrefs as $href) {
-        $id = url_to_postid($href);
-        if ($id != 0) {
-          $deep_post = get_post($id);
-          $custom = get_post_custom($id);
-          array_push($custom_fields->_menu_item_wpspa_object_links,
-            (object)array(
-              'id' => $id,
-              'type' => get_post_type($id),
-              'href' => $href,
-              'has_comments' => $deep_post->comment_count > 0,
-              'can_comment' => $deep_post->comment_status == "open",
-              'prefetch' => WPSPA_Menu_Links::get_prefetch_preference($custom)
-          ));
-        }
-      }
+
+    $children = WPSPA_Links::get_link_children($post);
+
+    foreach ($children as $id => $child) {
+      $custom = get_post_custom((int)$id);
+      array_push($custom_fields->_menu_item_wpspa_object_links,
+        (object)array(
+          'id' => (int)$id,
+          'type' => get_post_type((int)$id),
+          'href' => $child->href,
+          'has_comments' => $child->post->comment_count > 0,
+          'can_comment' => $child->post->comment_status == "open",
+          'prefetch' => WPSPA_Menu_Links::get_prefetch_preference($custom)
+        )
+      );
     }
   }
   
