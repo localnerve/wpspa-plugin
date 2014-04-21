@@ -41,11 +41,13 @@ class WPSPA_Nav_Menu_Item_Custom_Fields {
       $field['value'] = get_post_meta($item->ID, self::get_menu_item_postmeta_key($field['name']), true);
       $field['id'] = $item->ID;
 
-      if ( $item->object == 'page' && empty($field['value'])) {
+      // if page or category and no value assigned for post_type or object_id, fill in defaults
+      if ( ($item->object == 'page' || $item->object == 'category') && empty($field['value']) ) {
         if ($field['name'] == 'post_type')
-          $field['value'] = 'page';
-        else if ($field['name'] == 'object_id')
+          $field['value'] = $item->object;
+        else if ($field['name'] == 'object_id') {
           $field['value'] = get_post_meta($item->ID, '_menu_item_object_id', true);
+        }
       }
       
       $new_fields .= str_replace(
