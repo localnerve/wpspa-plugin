@@ -22,7 +22,7 @@ function wpspa_path($path) {
 }
 
 // Get the calls from json-api
-add_filter( 'json_api_controllers', wpspa_controllers );
-add_filter( 'json_api_wpspa_controller_path', wpspa_path );
+add_filter( 'json_api_controllers', 'wpspa_controllers' );
+add_filter( 'json_api_wpspa_controller_path', 'wpspa_path' );
 
 ?>
